@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
 import JetButton from '@/Jetstream/Button.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetCheckbox from '@/Jetstream/Checkbox.vue';
@@ -10,6 +10,7 @@ import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
 
 const form = useForm({
     name: '',
+    nick_name:'',
     email: '',
     password: '',
     password_confirmation: '',
@@ -26,9 +27,9 @@ const submit = () => {
 <template>
     <Head title="Register" />
 
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <AuthenticationCardLogo />
         </template>
 
         <JetValidationErrors class="mb-4" />
@@ -44,6 +45,18 @@ const submit = () => {
                     required
                     autofocus
                     autocomplete="name"
+                />
+            </div>
+
+            <div class="mt-4">
+                <JetLabel for="nick_name" value="Nick_name" />
+                <JetInput
+                    id="name"
+                    v-model="form.nick_name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+
                 />
             </div>
 
@@ -96,13 +109,13 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Already registered?
+                    Ya estas registrado?
                 </Link>
 
                 <JetButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
+                    Registrate
                 </JetButton>
             </div>
         </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
 </template>

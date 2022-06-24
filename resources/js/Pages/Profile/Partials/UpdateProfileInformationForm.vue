@@ -18,6 +18,8 @@ const form = useForm({
     _method: 'PUT',
     name: props.user.name,
     email: props.user.email,
+    presentation: props.user.presentation,
+    web_site: props.user.web_site,
     photo: null,
 });
 
@@ -171,6 +173,28 @@ const clearPhotoFileInput = () => {
                         A new verification link has been sent to your email address.
                     </div>
                 </div>
+            </div>
+            <!-- Web site -->
+            <div class="col-span-6 sm:col-span-4">
+                <JetLabel for="web_site" value="Web_site" />
+                <JetInput
+                    id="web_site"
+                    v-model="form.web_site"
+                    type="text"
+                    class="mt-1 block w-full"
+                />
+                <JetInputError :message="form.errors.web_site" class="mt-2" />
+            </div>
+             <!-- Presentation -->
+            <div class="col-span-6 sm:col-span-4">
+                <JetLabel for="presentation" value="Presentation" />
+                <JetInput
+                    id="presentation"
+                    v-model="form.presentation"
+                    type="text"
+                    class="mt-1 block w-full"
+                />
+                <JetInputError :message="form.errors.presentation" class="mt-2" />
             </div>
         </template>
 

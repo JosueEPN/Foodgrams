@@ -19,6 +19,11 @@ defineProps({
 
 const showingNavigationDropdown = ref(false);
 
+const RedirectSearch = (search) =>{
+
+    Inertia.get(route('search.index'), {search:search});
+};
+
 
 const switchToTeam = (team) => {
     Inertia.put(route('current-team.update'), {
@@ -59,7 +64,7 @@ const logout = () => {
                                 <Dropdown align="right" width="100" overflow="overflow-y-auto" maxheight="300">
                                     <template #trigger>
                                         <div class="pt-2 relative mx-auto text-gray-600">
-                                            <input v-model="search" @keyup.enter="route('Search')" class="border-2 border-gray-300 bg-white w-100 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                                            <input v-model="search" @keyup.enter="RedirectSearch(search)" class="border-2 border-gray-300 bg-white w-100 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                                             type="search" placeholder="Busca tu receta o amigos">
                                            <!-- Signo de -->
                                            <span class="absolute right-0 top-0 mt-5 mr-4">
@@ -327,7 +332,11 @@ const logout = () => {
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="max-w-7x1 min-w-7x1 mx-auto py-14">
+                    <div class="flex justify-center">
+                     <slot></slot>
+                    </div>
+                </div>
             </main>
         </div>
     </div>

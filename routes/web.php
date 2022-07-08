@@ -2,6 +2,9 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SearchUserController;
+use App\Http\Controllers\PostController;
+
 use Inertia\Inertia;
 
 /*
@@ -27,6 +30,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/dashboard/search', SearchUserController::class)->name('search.index');
+    Route::get('/dashboard/search', [SearchUserController::class, 'index'])->name('search.index');
+    Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
+
 
 });

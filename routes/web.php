@@ -31,7 +31,8 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::get('/dashboard/search', [SearchUserController::class, 'index'])->name('search.index');
-    Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
-
+    Route::get('/post-create', [PostController::class, 'create'])->name('post.index');
+    Route::post('/post-create', [PostController::class, 'store'])->name('post.store');
+    Route::get('/list-posts', [PostController::class,'getPosts'])->name('list-post');
 
 });

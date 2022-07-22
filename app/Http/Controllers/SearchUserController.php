@@ -35,9 +35,7 @@ class SearchUserController extends Controller
         $users = $users->paginate(10);
 
 
-
-
-        return Inertia::render('Search', compact('users'), compact('posts'));
+        return Inertia::render('Search', compact('users','posts'));
     }
 
     /**

@@ -39,11 +39,11 @@ export default {
                         <h3>Recetas</h3>
                             <table class="table-fixed w-full">
                             <tbody>
-                                <tr v-for="p in posts.data" :key="p.id">
+                                <tr v-for="post in posts.data" :key="post.id">
                                     <td class="p-3 border content-center w-40">
-                                        <img :src="p.image_path" :alt="p.title">
+                                        <img :src="post.image_path" :alt="post.title">
                                     </td>
-                                    <td class="p-3 border">{{ p.title }}</td>
+                                    <td class="p-3 border">{{ post.title }}</td>
                                 </tr>
                             </tbody>
 

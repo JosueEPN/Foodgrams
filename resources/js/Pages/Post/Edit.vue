@@ -2,12 +2,12 @@
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Creemos una receta
+                Edita tu receta
             </h2>
         </template>
                 <div class=" bg-white rounded-md px-6 py-10 w-full">
-                    <h1 class="text-center text-2xl font-bold text-gray-500 mb-10">Crea tu Receta</h1>
-                    <form @submit.prevent="submit" enctype="multiform/form-data">
+                    <h1 class="text-center text-2xl font-bold text-gray-500 mb-10">Edita</h1>
+                    <form @submit.prevent="summit" enctype="multiform/form-data">
                         <div class="space-y-4 flex flex-row">
                             <div class="basis-1/2">
                                 <div>
@@ -17,10 +17,10 @@
                                             <label class='flex flex-col border-4 border-dashed w-full h-auto hover:bg-gray-100 hover:border-purple-300 group'>                                                
                                                 <div class='flex flex-col items-center justify-center pt-7'>
                                                 <div class="grid grid-cols-1 mt-5 mx-7">
-                                                    <img v-if="url" :src="url" style="max-width: 100%; max-height: 400px; margin: 0 auto;">           
+                                                    <img  :src="form.image_path" style="max-width: 100%; max-height: 400px; margin: 0 auto;">           
                                                 </div>
                                                 <input-error :message="errors.image"/>
-                                                <svg v-if="!url" class="w-10 h-10 text-purple-400 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                
                                                 <p class='text-sm text-gray-400 group-hover:text-purple-600 pt-1 tracking-wider'>Seleccione la imagen</p>
                                                 </div>
                                             <input id="image" @change="filechange" type="file" name="image" accept="image/gif,image/jepg,image/png,image/jpg" class="hidden" />
@@ -33,34 +33,38 @@
 
                                 <div class="m-3">
                                     <label for="title" class="text-lx font-serif">Titulo:</label>
-                                    <input v-model="text" type="text" placeholder="title" id="title" class="ml-2 outline-none py-1 px-2 text-md border-2 rounded-md" />
-                                    <input-error :message="errors.text"/>
+                                    <input v-model="form.title" type="text"  id="title" class="ml-2 outline-none py-1 px-2 text-md border-2 rounded-md" />
+                                    <input-error :message="errors.title"/>
                                 </div>
 
                                 <div class="m-3">
                                     <label for="title" class="text-lx font-serif">Porciones</label>
-                                    <input v-model="number" type="number" class="ml-2 outline-none py-1 px-2 text-md border-2 rounded-md" />
-                                    <input-error :message="errors.number"/>
+                                    <input v-model="form.portions" type="number" class="ml-2 outline-none py-1 px-2 text-md border-2 rounded-md" />
+                                    <input-error :message="errors.portions"/>
                                 </div>
 
                                 <div class="m-3">
                                     <label class="block mb-2 text-lg font-serif">Ingredientes</label>
-                                    <textarea v-model="text2" id="Ingredientes" cols="30" rows="10" placeholder="whrite here.." class="w-full font-serif  p-4 text-gray-600 bg-indigo-50 outline-none rounded-md"></textarea>
-                                    <input-error :message="errors.text2"/>
+                                    <textarea v-model="form.ingredients" id="Ingredientes" cols="30" rows="10" placeholder="whrite here.." class="w-full font-serif  p-4 text-gray-600 bg-indigo-50 outline-none rounded-md"></textarea>
+                                    <input-error :message="errors.ingredients"/>
                                 </div>
 
                                 <div class="m-3">
                                     <label class="block mb-2 text-lg font-serif">Preparacion:</label>
-                                    <textarea v-model="text3" id="description" cols="30" rows="10" placeholder="whrite here.." class="w-full font-serif  p-4 text-gray-600 bg-indigo-50 outline-none rounded-md"></textarea>
-                                    <input-error :message="errors.text3"/>
+                                    <textarea v-model="form.description" id="description" cols="30" rows="10" placeholder="whrite here.." class="w-full font-serif  p-4 text-gray-600 bg-indigo-50 outline-none rounded-md">{{text3}}</textarea>
+                                    <input-error :message="errors.description"/>
                                 </div>
 
 
                             </div>
 
                         </div>
-
-                        <button type="submit"  class=" px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  ">Crear Posts</button>
+                        <div>
+                            <button type="submit"  class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  ">Edita el Posts</button>
+                            <button class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  "><Link :href="route('dashboard')"  >Cancelar</Link></button>
+                        </div>
+                        
+                        
                     </form>
                 </div>
 
@@ -71,68 +75,56 @@
     </AppLayout>
 </template>
 
-<script>
+<script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import InputError from "@/Jetstream/InputError";
-export default {
-    props:{
+import { defineProps } from 'vue';
+import { useForm,Link } from '@inertiajs/inertia-vue3';
+import route from '../../../../vendor/tightenco/ziggy/src/js';
+
+const props = defineProps({
+        PostEdit:Object,
         errors:Object
-    },
+});
 
-    components:{
-        AppLayout,
-        Inertia,
-        InputError
-    },
-    data(){
-        return{
-            url:null,
-            image:null,
-            text:'',
-            number: 0,
-            text2:'',
-            text3:'',
+const form = useForm ({
+        
+    image_path:props.PostEdit.image_path,
+    image:null,
+    title:props.PostEdit.title,
+    portions:props.PostEdit.portions,
+    ingredients:props.PostEdit.ingredients,
+    description:props.PostEdit.description,
+        
+});
 
+function summit(){
+  Inertia.post(route('post.update', props.PostEdit.id),{
+            _method:"put",
+            image_path:form.image_path,
+            image:form.image,
+            title:form.title,
+            portions:form.portions,
+            ingredients:form.ingredients,
+            description:form.description,
 
+    },)         
+}
 
-        }
-    },
-    methods:{
-
-        submit(){
-            Inertia.post(route('post.store'),{
-
-                image:  this.image,
-                text:   this.text,
-                number: this.number,
-                text2:  this.text2,
-                text3:  this.text3,
-            })
-            this.resetData()
-        },
-
-        filechange(e){
+function filechange(e){
 
             let file = e.target.files[0]
-            this.image = file
-            this.url = URL.createObjectURL(file)
-
-        },
-        selectImage(){
-            document.getElementById('image').click()
-        },
-            resetData(){
-                this.url = null
-                this.image = null
-                this.text = ''
-                this.number= 0
-                this.text2=''
-                this.text3=''
-            },
-
-    },
-
+            form.image = file
+            form.url = URL.createObjectURL(file)
 
 }
+function selectImage(){
+            document.getElementById('image').click()
+}
+            
+
+
+
+
 </script>

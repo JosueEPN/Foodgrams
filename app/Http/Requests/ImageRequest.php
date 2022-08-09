@@ -34,7 +34,9 @@ class ImageRequest extends FormRequest
     public function messages(){
         return [
             'image.required' => 'Tiene que seleccionar una imagen',
-            'title.required' => 'Tienes que colocar un titulo a la receta',
+            'text.required' => 'Tienes que colocar un titulo a la receta',
+            'text2.required' => 'Tienes que colocar los ingredientes a la receta',
+            'text3.required' => 'Tienes que colocar la preparación a la receta',
         ];
     }
 }

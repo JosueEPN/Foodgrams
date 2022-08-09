@@ -60,7 +60,7 @@ class Posts extends Model
         $name = uniqid().$file->getClientOriginalName();
         $url = null;
 
-        $storage = Storage::disk('public')->put($name,$file); // carga de la imagen
+        $storage = Storage::disk('public')->put($name,$file);
         $url = asset('storage/'.$storage);
 
         $post = (new static)::create([
@@ -81,7 +81,7 @@ class Posts extends Model
     }
 
     public static function getPost($id){
-        $query = (new static)::with([
+        return (new static)::with([
             'user',
             'comments' => function($query){
                 $query->with('user:id,name,nick_name,profile_photo_path');
@@ -92,7 +92,23 @@ class Posts extends Model
         ->orWhereIn('user_id',Followers::select('user_id')->where('follower_id',$id)->get())
         ->orderBy('created_at','desc')
         ->get();
+
+    }
+/*
+
+    public static function updatePost($editpost){        
+
+        $editpost->update([
+            'title' => $editpost->text,
+            'image_path' => $editpost->url,
+            'description' => $editpost->text3,
+            'ingredients'=> $editpost->text2,
+            'portions' => $editpost->number,
+            'date_post' => Carbon::now(),
+            'user_id' => Auth::id(),
+        ]);
     }
 
+*/
 
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Posts extends Model
 {
@@ -35,21 +36,12 @@ class Posts extends Model
             return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get all of the comments for the posts
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+  
     public function comments()
     {
         return $this->hasMany(Comments::class, 'post_id');
     }
 
-    /**
-     * Get all of the likes for the posts
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function likes()
     {
         return $this->hasMany(Likes::class, 'post_id');
@@ -80,34 +72,54 @@ class Posts extends Model
         ])->find($post->id);
     }
 
-    public static function getPost($id){
-        return (new static)::with([
+    public static function getPost($id,$profile = null){
+        $querry = (new static)::with([
             'user',
             'comments' => function($query){
                 $query->with('user:id,name,nick_name,profile_photo_path');
             },
             'likes'
         ])
-        ->where('user_id',$id)
-        ->orWhereIn('user_id',Followers::select('user_id')->where('follower_id',$id)->get())
-        ->orderBy('created_at','desc')
+        ->where('user_id',$id);
+        if(is_null($profile)){
+            $querry = $querry ->orWhereIn('user_id',Followers::select('user_id')->where('follower_id',$id)->get());
+        }
+        
+       return $querry->orderBy('created_at','desc')
         ->get();
 
     }
+
+    public static function getPostSearch($title){
+
+        $querry = (new static)
+        ->where('title' ,'like' ,'%'.$title."%")
+        ->get();
+      
+
+        return $querry;
+        
+    }
+
+    public static function getPostView($id)
+    {
+        $querry = (new static)::with( [
+            'user',
+            'comments' => function($query){
+                $query->with('user:id,name,nick_name,profile_photo_path');
+            },
+            'likes'
+            
+        ])
+        ->where('id' , '=' ,$id)
+        ->get();
+      
+
+        return $querry;
+    }
 /*
 
-    public static function updatePost($editpost){        
-
-        $editpost->update([
-            'title' => $editpost->text,
-            'image_path' => $editpost->url,
-            'description' => $editpost->text3,
-            'ingredients'=> $editpost->text2,
-            'portions' => $editpost->number,
-            'date_post' => Carbon::now(),
-            'user_id' => Auth::id(),
-        ]);
-    }
+ 
 
 */
 

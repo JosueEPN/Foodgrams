@@ -6,7 +6,9 @@
             :alt="nickName" />
         </a>
         <p class="font-bold ml-2">
-            <a class="cursor-pointer">{{ nickName }}:  </a>
+            <a class="cursor-pointer">{{ nickName }}  </a>
+            <a class="text-sm text-gray-500">Hace {{ getDifferenceTime(create) }}:</a>
+
             <span class="text-gray-700 font-medium ml-1">
                 {{ comment }}
             </span>
@@ -15,7 +17,15 @@
 
 </template>
 <script>
+import moment from 'moment'
     export default {
-        props:['comment','nickName','urlImage']
+        props:['comment','nickName','urlImage','create'],
+        methods: {
+            
+            getDifferenceTime(date){
+                return moment(date).toNow(true)
+            },
+        }
     }
+    
 </script>

@@ -9,8 +9,8 @@ class Comments extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'post_id',
         'user_id',
+        'post_id',        
         'comment',
     ];
 
@@ -32,5 +32,23 @@ class Comments extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    } 
+
+
+    public function getComment($id)
+    {
+        $querry = (new static)::with( [
+            
+               'name',
+               'nick_name',
+               'profile_photo_path'
+            
+            
+        ])
+        ->where('post_id','=',$id)
+        ->get();
+
+        return $querry;
+
     }
 }

@@ -13,23 +13,22 @@ class Followers extends Model
         'follower_id',
     ];
 
-    /**
-     * Get the user that owns the Followers
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+   
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the follower that owns the Followers
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    
     public function follower()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function follow($user_id){
+        return (new static)::create([
+            'user_id' => $user_id,
+            'follower_id' => auth()->user()->id
+        ]);
     }
 }

@@ -13,23 +13,29 @@ class Likes extends Model
         'user_id',
     ];
 
-    /**
-     * The roles that post to the Comments
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
+    
     public function post()
     {
         return $this->belongsTo(Posts::class);
     }
 
-    /**
-     * Get the user that owns the Likes
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function like($postId,$userId){
+        return (new static)::create([
+            'post_id' => $postId,
+            'user_id' => $userId,
+        ]);
+    }
+
+    public static function deleteLike($postId,$userId){
+        (new static)::where([
+            'post_id' => $postId,
+            'user_id' => $userId,
+        ])->delete();
     }
 }

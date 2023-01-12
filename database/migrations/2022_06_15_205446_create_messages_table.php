@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('file_path')->nullable();
             $table->string('file_name')->nullable();
             $table->date('send_date');
-            $table->enum('type', ['text', 'image','document'])->nullable()->default('text');
+            $table->enum('type', ['text', 'image','document'])->default('text')->nullable();
             $table->timestamps();
         });
     }

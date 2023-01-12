@@ -1,43 +1,75 @@
-<script setup>
-
-import { ref, watch } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
-import { Head, Link } from '@inertiajs/inertia-vue3';
-
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import JetBanner from '@/Jetstream/Banner.vue';
-import JetDropdown from '@/Jetstream/Dropdown.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
-
-import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
+<script>
+    
+    import { Inertia } from '@inertiajs/inertia';
+    import { Link } from '@inertiajs/inertia-vue3';
+    import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+    import JetBanner from '@/Jetstream/Banner.vue';
+    import JetDropdown from '@/Jetstream/Dropdown.vue';
+    import Dropdown from '@/Components/Dropdown.vue';
+    import Notifications from '@/Components/Notifications.vue';
+    import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
+    import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
 
 
-defineProps({
-    title: String,
-});
+    export default {
+        components: {
+    JetBanner,
+    JetDropdown,
+    JetDropdownLink,
+    JetResponsiveNavLink,
+    AuthenticationCardLogo,
+    Dropdown,
+    Link,
+    Inertia,
+    Dropdown,
+    Notifications,
+},
 
-const showingNavigationDropdown = ref(false);
+        data() {
+            return {
+                showingNavigationDropdown: false,
+                users:[],
+                search:'',
+                userexists: true
+            }
+        },
+        props:{
+            title: String,
+        },
 
-const RedirectSearch = (search) =>{
+        methods: {
+            switchToTeam(team) {
+                this.$inertia.put(route('current-team.update'), {
+                    'team_id': team.id
+                }, {
+                    preserveState: false
+                })
+            },
+            RedirectSearch(search){
 
-    Inertia.get(route('search.index'), {search:search});
-};
+                Inertia.get(route('search.index'), {search:search});
+            },
 
+            logout() {
+                axios.post('/offline/'+this.$page.props.user.id,{})
+                axios.post('/logout')
+                    .then(response => {
+                        window.location = '/login'
+                    })
 
-const switchToTeam = (team) => {
-    Inertia.put(route('current-team.update'), {
-        team_id: team.id,
-    }, {
-        preserveState: false,
-    });
-};
-
-const logout = () => {
-    Inertia.post(route('logout'));
-};
-
-
+            }, listen(){
+                window.Echo.join('Foodgrams-channel')
+                .joining((user) => {
+                    if(user.status === 0){
+                        axios.post('/online/'+user.id,{})
+                    }
+                })
+            }
+        },
+        mounted() {
+            this.listen()
+        },
+    }
 </script>
 
 <template>
@@ -84,6 +116,20 @@ const logout = () => {
                             </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <!-- Chat -->
+                            <div class="ml-3">
+                                <Link :href="route('chats')">
+                                    <svg class="text-gray-700 w-7 h-7 cursor-pointer origin-center transform rotate-45" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </Link>
+                            </div>
+
+                            <!-- Notifications -->
+
+                            <notifications></notifications>
+
+
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <JetDropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -157,34 +203,20 @@ const logout = () => {
                             <div class="ml-3 relative">
                                 <JetDropdown align="right" width="48">
                                     <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
+                                        <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                                         </button>
-
-                                        <span v-else class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
-                                                {{ $page.props.user.name }}
-
-                                                <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </span>
                                     </template>
 
                                     <template #content>
                                         <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
-                                        </div>
+
+                                        <JetDropdownLink  :href="'/profile/'+$page.props.user.nick_name">
+                                            Perfil
+                                        </JetDropdownLink>                                        
 
                                         <JetDropdownLink :href="route('profile.show')">
-                                            Profile
+                                            Configuración
                                         </JetDropdownLink>
 
                                         <JetDropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
@@ -259,9 +291,13 @@ const logout = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <JetResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
-                                Profile
-                            </JetResponsiveNavLink>
+                            <JetDropdownLink  :href="'/profile/'+$page.props.user.nick_name" :active="route().current('profile')">
+                                Perfil
+                            </JetDropdownLink>                                        
+
+                            <JetDropdownLink :href="route('profile.show')" :active="route().current('profile.show')">
+                                Configuración
+                            </JetDropdownLink>
 
                             <JetResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens

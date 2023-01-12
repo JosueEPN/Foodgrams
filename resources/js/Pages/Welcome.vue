@@ -8,6 +8,8 @@
         </div>
         <div v-else class="text-3xl">No hay publicaciones</div>
 
+        <div>
+        </div>
         <modal-post :show="show" :post="post" @show="changeStateModalPost"></modal-post>
     </div>
 </template>

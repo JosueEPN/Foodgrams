@@ -13,31 +13,19 @@ class Chats extends Model
         'user_recive',
     ];
 
-    /**
-     * Get the usersent that owns the Chats
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    
     public function usersent()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_send');
     }
 
-    /**
-     * Get the userrecive that owns the Chats
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    
     public function userrecive()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_recive');
     }
 
-    /**
-     * Get all of the messages for the Chats
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+   
     public function messages()
     {
         return $this->hasMany(Messages::class,'chat_id');

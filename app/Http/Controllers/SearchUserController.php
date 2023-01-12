@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Posts;
+use App\Models\Comments;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Database\Eloquent\Builder;
 
 class SearchUserController extends Controller
 {
@@ -20,87 +22,41 @@ class SearchUserController extends Controller
 
         if(request()->has("search")){
             $title=request("search");
-            $posts = $posts->where('title' ,'like' ,'%'.$title."%");
+            $posts = Posts::getPostSearch($title);
+            
+            
         }
 
-        $posts= $posts->paginate(10);
+        
 
         $users = User::orderBy("id");
 
         if(request()->has("search")){
             $nick_name=request("search");
-            $users = $users->where('nick_name' ,'like' ,'%'.$nick_name."%");
+            $users = User::getUserSearch($nick_name);
         }
 
-        $users = $users->paginate(10);
+        
+        //return $users;
 
+        return Inertia::render('Search', 
+        [
+            'posts' => $posts,
+            'users' => $users
 
-        return Inertia::render('Search', compact('users','posts'));
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function usersIFollow($nick_name){
+        return User::select('id','name','nick_name','profile_photo_path')
+        ->whereHas('followers',function(Builder $query){
+            $query->where('follower_id',auth()->user()->id);
+        })
+        ->where('nick_name','like','%'.$nick_name.'%')
+        ->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
+   
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
 }

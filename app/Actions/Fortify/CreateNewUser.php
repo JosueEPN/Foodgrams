@@ -33,6 +33,6 @@ class CreateNewUser implements CreatesNewUsers
             'nick_name' => $input['nick_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-        ]);
+        ])->assignRole('Creador');;
     }
 }

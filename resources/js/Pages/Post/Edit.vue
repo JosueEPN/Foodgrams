@@ -6,6 +6,7 @@
             </h2>
         </template>
                 <div class=" bg-white rounded-md px-6 py-10 w-full">
+                    {{ PostEdit }}
                     <h1 class="text-center text-2xl font-bold text-gray-500 mb-10">Edita</h1>
                     <form @submit.prevent="summit" enctype="multiform/form-data">
                         <div class="space-y-4 flex flex-row">
@@ -17,7 +18,10 @@
                                             <label class='flex flex-col border-4 border-dashed w-full h-auto hover:bg-gray-100 hover:border-purple-300 group'>                                                
                                                 <div class='flex flex-col items-center justify-center pt-7'>
                                                 <div class="grid grid-cols-1 mt-5 mx-7">
-                                                    <img  :src="form.image_path" style="max-width: 100%; max-height: 400px; margin: 0 auto;">           
+                                                    
+                                                        <img  :src="form.image_path" style="max-width: 100%; max-height: 400px; margin: 0 auto;">
+                    
+                                                              
                                                 </div>
                                                 <input-error :message="errors.image"/>
                                                 
@@ -60,7 +64,7 @@
 
                         </div>
                         <div>
-                            <button type="submit"  class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  ">Edita el Posts</button>
+                            <button type="submit"  class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600">Edita el Posts</button>
                             <button class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  "><Link :href="route('dashboard')"  >Cancelar</Link></button>
                         </div>
                         
@@ -90,6 +94,7 @@ const props = defineProps({
 
 const form = useForm ({
         
+    id:props.PostEdit.id,
     image_path:props.PostEdit.image_path,
     image:null,
     title:props.PostEdit.title,
@@ -100,23 +105,14 @@ const form = useForm ({
 });
 
 function summit(){
-  Inertia.post(route('post.update', props.PostEdit.id),{
-            _method:"put",
-            image_path:form.image_path,
-            image:form.image,
-            title:form.title,
-            portions:form.portions,
-            ingredients:form.ingredients,
-            description:form.description,
-
-    },)         
+  form.post('/post/update');
 }
 
 function filechange(e){
 
             let file = e.target.files[0]
             form.image = file
-            form.url = URL.createObjectURL(file)
+            form.image_path = URL.createObjectURL(file)
 
 }
 function selectImage(){

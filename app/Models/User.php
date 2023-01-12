@@ -20,11 +20,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
+   
     protected $fillable = [
         'name',
         'nick_name',
@@ -35,11 +31,7 @@ class User extends Authenticatable
         'status',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
+  
     protected $hidden = [
         'password',
         'remember_token',
@@ -76,13 +68,22 @@ class User extends Authenticatable
         return $this->hasMany(Posts::class);
     }
 
-    /**
-     * Get all of the followers for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function followers()
     {
         return $this->hasMany(Followers::class);
+    }
+
+    public function receivesBroadcastNotificationsOn(){
+        return 'App.Models.User.'.$this->id;
+    }
+
+    public static function getUserSearch($nick_name){
+
+        $querry = (new static)
+        ->where('nick_name' ,'like' ,'%'.$nick_name."%")
+        ->get();
+      
+        return $querry;
+        
     }
 }

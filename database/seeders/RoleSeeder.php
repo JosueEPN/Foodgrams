@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleSeeder extends Seeder
 {
@@ -16,12 +17,12 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $roleAdmin = Role::create(['name' => 'admin']);
-        $roleInvitado = Role::create(['name' => 'invitado']);
+        $role1 = Role::create(['name' => 'Admin']);
+        $role2 = Role::create(['name' => 'Creador']);
 
-        Permission::create(['name' => 'admin.recetas.create'])->syncRoles([$roleAdmin,$roleInvitado]);
-        Permission::create(['name' => 'admin.recetas.edit'])->syncRoles([$roleAdmin,$roleInvitado]);
-        Permission::create(['name' => 'admin.recetas.destroy'])->syncRoles([$roleAdmin,$roleInvitado]);
+        Permission::create(['name' => 'admin.recetas.create'])->assignRole($role1);
+        Permission::create(['name' => 'admin.recetas.edit'])->assignRole($role1);
+        Permission::create(['name' => 'admin.recetas.destroy']) ->assignRole($role1);
 
 
 

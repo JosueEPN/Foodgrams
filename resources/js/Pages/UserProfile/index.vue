@@ -9,7 +9,7 @@
                         <div class="flex items-center">
                             <h2 class="block leading-relaxed font-light text-gray-700 text-3xl">{{ userProfile.nick_name }}</h2>
                             <Link v-if="userProfile.id !== $page.props.user.id" :href="'/direct-message/'+userProfile.id" class="cursor-pointer h-7 px-3 ml-3 outline-none border-transparent text-center rounded border bg-blue-500 hover:bg-blue-600 text-white bg-transparent font-semibold">Enviar mensaje</Link>
-                            <Link v-if="userProfile.id === $page.props.user.id || $page.props.user.permission.includes('admin.recetas.create')" :href="'/user/profile/'+userProfile.id" class="cursor-pointer h-7 px-3 ml-3 focus:outline-none hover:border-transparent text-center rounded border border-gray-400 hover:bg-blue-500 hover:text-white bg-transparent text-gray-500 font-semibold">Editar perfil</Link>
+                            <Link v-if="userProfile.id === $page.props.user.id || $page.props.user.permission.includes('admin.recetas.create')" href="/user/profile" class="cursor-pointer h-7 px-3 ml-3 focus:outline-none hover:border-transparent text-center rounded border border-gray-400 hover:bg-blue-500 hover:text-white bg-transparent text-gray-500 font-semibold">Editar perfil</Link>
                             
                             <div v-else>
                                 <button v-if="!existsState" @click="follow" class="flex items-center ml-3 border border-blue-600 hover:bg-blue-600 hover:text-white rounded outline-none focus:outline-none bg-transparent text-blue-600 text-sm py-1 px-2">
@@ -95,18 +95,16 @@ import route from '../../../../vendor/tightenco/ziggy/src/js'
                 this.show = !this.show
             },
             async follow(){
-                await axios(route('follow-user'),{user_id: this.userProfile.id})
+                await axios.post('/follow-user',{user_id: this.userProfile.id})
                 .then(response => {
-                    
                     this.existsState = !this.existsState
                     if(this.userProfile.id === this.$page.props.user.id){
                         this.$page.props.unreadNotifications++
                     }
                 })
-                
             },
             async unfollow(){
-                await axios.post(route('unfollow-user'),{user_id: this.userProfile.id})
+                await axios.post('/unfollow-user',{user_id: this.userProfile.id})
                     .then(response => {
                         this.existsState = !this.existsState
                     })

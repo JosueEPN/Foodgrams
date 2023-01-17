@@ -87,8 +87,8 @@ export default {
 
                             <div v-if="$page.props.user.permission.includes('admin.recetas.create') || $page.props.user.id == post.user_id" >        
                             
-                                <button> <Link :href="'/post/'+post.id+'/edit'"> Editar </Link> </button>
-                                <button > <Link :href="'/post/'+post.id+'/delete'" > Eliminar </Link></button>
+                                <button> <Link :href="'/post/'+post.id+'/'+post.user_id+'/edit'"> Editar </Link> </button>
+                                <button > <Link :href="'/post/'+post.id+'/'+post.user_id+'/delete'" > Eliminar </Link></button>
                 
                             </div>
 

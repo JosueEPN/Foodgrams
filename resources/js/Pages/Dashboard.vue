@@ -8,6 +8,7 @@ defineProps({
 
 <template>
     <AppLayout >
+        
         <Welcome :posts="posts"/>
     </AppLayout>
 </template>

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Notifications\NotifyFollow;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -22,7 +23,7 @@ class ProfileController extends Controller
     }
 
     public function index($nick_name){
-        $user = $this->user->where('nick_name',$nick_name)->first();
+        $user = $this->user->where('nick_name','=',$nick_name)->first();
 
         $followers = $user->followers()->count();
         $followed = $this->followers->where('follower_id',$user->id)->count();
@@ -40,22 +41,21 @@ class ProfileController extends Controller
 
     public function followUser(Request $request){
 
-        return 'si entro al controlador';
         $user = User::find($request->user_id);
 
-        $user->notify(new NotifyFollow(auth()->user()));
+        $user->notify(new NotifyFollow(Auth::user()));
 
-        //return $this->followers->follow($request->user_id);
+        return $this->followers->follow($request->user_id);
     }
 
     public function unFollow(Request $request){
-        $follow = $this->followers->where('user_id',$request->user_id)->where('follower_id',auth()->user()->id)->first();
+        $follow = $this->followers->where('user_id',$request->user_id)->where('follower_id','=',Auth::id())->first();
 
         return $follow->delete();
     }
 
     public function existsFollow($user_id){
-        return $this->followers->where('user_id',$user_id)->where('follower_id',auth()->user()->id)->exists()
+        return $this->followers->where('user_id',$user_id)->where('follower_id','=',Auth::id())->exists()
         ? ['exists' => true] : ['exists' => false];
     }
 

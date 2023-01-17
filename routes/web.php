@@ -40,9 +40,9 @@ Route::middleware([
     Route::get('/post-show', [PostController::class, 'show'])->name('post.show');
     Route::get('/post-create', [PostController::class, 'create'])->name('post.index');
     Route::post('/post-store', [PostController::class, 'store'])->name('post.store');
-    Route::get('/post/{post}/edit', [PostController::class, 'show'])->name('post.show');
+    Route::get('/post/{post}/{user}/edit', [PostController::class, 'show'])->name('post.show');
     Route::post('/post/update', [PostController::class, 'update'])->name('post.update');
-    Route::get('/post/{post}/delete', [PostController::class, 'destroy'])->name('post.delete');
+    Route::get('/post/{post}/{user}/delete', [PostController::class, 'destroy'])->name('post.delete');
     Route::post('/like-post', [PostController::class, 'likeOrDislike'])->name('like-post');
     Route::post('/comment', [PostController::class, 'comment'])->name('comment');
     Route::get('/post/view', [PostController::class, 'view'])->name('post.view');

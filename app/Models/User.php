@@ -29,12 +29,13 @@ class User extends Authenticatable
         'web_site',
         'presentation',
         'status',
+        
     ];
 
   
     protected $hidden = [
-        'password',
         'remember_token',
+        'password',
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];

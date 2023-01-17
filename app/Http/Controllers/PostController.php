@@ -9,14 +9,10 @@ use App\Models\Likes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\ImageRequest;
-use App\Http\Requests\RequestEdit;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use SebastianBergmann\CodeCoverage\Report\Html\Renderer;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Collection;
+
 
 class PostController extends Controller
 {
@@ -60,12 +56,18 @@ class PostController extends Controller
     }
 
 
-    public function show(Posts $post)
+    public function show(Posts $post, User $user)
     {
+        $idAuth=Auth::id();
+        if($idAuth == $post->user_id || ['role:Admin'])
+        {
+            return Inertia::render('Post/Edit',[
+                'PostEdit' => $post
+             ]);
+        }
        
-         return Inertia::render('Post/Edit',[
-            'PostEdit' => $post
-         ]);
+        return redirect() -> route('dashboard');  
+        
        
     }
 
@@ -111,29 +113,36 @@ class PostController extends Controller
     }
 
 
-    public function destroy(Posts $post)
+    public function destroy(Posts $post, User $user)
     {
+            
+            $likes = $post->likes;
+        
+            foreach($likes as $item) { //foreach element in $arr
+                $deleteLikes = Likes::find($item['id']);
+                $deleteLikes ->delete(); 
+ 
+            }
+            
+            $comments = $post->comments;
+            
 
-        $likes = $post->likes;
-        
-        foreach($likes as $item) { //foreach element in $arr
-            $deleteLikes = Likes::find($item['id']);
-            $deleteLikes ->delete(); 
-            //etc
-        }
-        
-        $comments = $post->comments;
-        
+            foreach($comments as $item) { 
+                $deleteComments = Comments::find($item['id']);
+                $deleteComments ->delete(); 
 
-        foreach($comments as $item) { //foreach element in $arr
-            $deleteComments = Comments::find($item['id']);
-            $deleteComments ->delete(); 
-            //etc
-        }
-        $url = str_replace('storage', 'public', "post");
-        Storage::delete( $url,$post->image_path);
-        $post->delete();
-        return redirect() -> route('dashboard');        
+            }
+            $url = str_replace('storage', 'public', "post");
+            Storage::delete( $url,$post->image_path);
+            $post->delete(); 
+            return back();
+       
+
+            
+
+     
+        
+               
     }
 
     public function likeOrDislike(Request $request){

@@ -63,5 +63,23 @@ class Messages extends Model
         ]);
     }
 
+    public static function getMessagesUser($id)
+    {
+        $querry = (new static)
+        ->where('user_id' ,'=' ,$id)
+        ->get();
+      
+        return $querry;
+    }
+
+    public static function getMessagesAll($id)
+    {
+        $querry = (new static)
+        ->where('chat_id' ,'=' ,$id)
+        ->get();
+      
+        return $querry;
+    }
+
 
 }

@@ -22,9 +22,7 @@ class SearchUserController extends Controller
 
         if(request()->has("search")){
             $title=request("search");
-            $posts = Posts::getPostSearch($title);
-            
-            
+            $posts = Posts::getPostSearch($title); 
         }
 
         

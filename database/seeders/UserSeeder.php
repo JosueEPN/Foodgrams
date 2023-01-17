@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'nick_name' => 'Josin15',
             'email_verified_at' => now(),
             'password' => bcrypt('secret'), // password
-            'remember_token' => Str::random(10),
+            'remember_token' => Str::random(30),
         ])->assignRole('Admin');
         
 

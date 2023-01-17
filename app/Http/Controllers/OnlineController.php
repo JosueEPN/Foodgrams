@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class OnlineController extends Controller
 {
     public function __invoke($id){
-        User::where('id',$id)->update(['status' => 1]);
+        User::where('id','=',$id)->update(['status' => 1]);
 
         event(new OnlineEvent(User::find($id)));
     }

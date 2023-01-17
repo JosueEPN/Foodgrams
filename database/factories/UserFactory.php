@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'nick_name' => $this->faker->unique()->name(),
             'email_verified_at' => now(),
             'password' => bcrypt('secret'), // password
-            'remember_token' => Str::random(10),
+            'remember_token' => Str::random(30),
         ];
     }
 

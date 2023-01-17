@@ -30,4 +30,15 @@ class Chats extends Model
     {
         return $this->hasMany(Messages::class,'chat_id');
     }
+
+
+    public static function getChat($id)
+    {
+        $querry = (new static)
+        ->where('id' ,'=' ,$id)
+        ->get();
+      
+
+        return $querry;
+    }
 }

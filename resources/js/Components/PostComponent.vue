@@ -45,8 +45,8 @@
           <div v-if="$page.props.user.permission.includes('admin.recetas.create') || $page.props.user.id == post.user_id" >
 
           </div>        
-              <li class="rounded-sm px-3 py-1 hover:bg-gray-100" > <Link :href="'/post/'+post.id+'/edit'"> Editar </Link></li>
-              <li class="rounded-sm px-3 py-1 hover:bg-gray-100"> <Link :href="'/post/'+post.id+'/delete'" > Eliminar </Link></li>
+              <li class="rounded-sm px-3 py-1 hover:bg-gray-100" > <Link :href="'/post/'+post.id+'/'+post.user_id+'/edit'"> Editar </Link></li>
+              <li class="rounded-sm px-3 py-1 hover:bg-gray-100"> <Link :href="'/post/'+post.id+'/'+post.user_id+'/delete'" > Eliminar </Link></li>
             
           </ul>
         </div>          

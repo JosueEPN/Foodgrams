@@ -50,13 +50,15 @@
             },
         },
         mounted() {
-            var pusher = new Pusher('e99815844fbcceafaf02', {
+
+            var pusher = new Pusher('a1e93a0fc79646900b91', {
             cluster: 'us2'
             });
 
             var channel = pusher.subscribe('Foodgrams-channel');
          
-            
+
+
         },   
     }
 </script>

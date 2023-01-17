@@ -21,8 +21,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'nick_name' => ['required', 'string', 'max:255', 'unique:users'],
-            'presentation' => ['required', 'string', 'max:255'],
-            'web_site' => ['required', 'string', 'max:255'],
+            'presentation' => [ 'string', 'max:255'],
+            'web_site' => ['string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');

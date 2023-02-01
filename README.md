@@ -1,64 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Foodgrams
+## _Instalacion Local_
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+El presente repositorio contiene el proyecto desarrollado previo a la obtención del título profesional, a continuación se presenta las temáticas de instalación.
+- Requisitos de instalación
+- Proceso de instalación
+- Errores comunes
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requisitos de instalación
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Previo a la descarga e instalación del proyecto, es necesario tener instalado las siguientes herramientas, las cuales permiten la ejecución de dependencias que se necesita.
+- [Composer](https://getcomposer.org/download/)
+- [Node.js](https://nodejs.org/en/download/)
+- [Xampp](https://www.apachefriends.org/es/download.html)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## Proceso de instalación
+##### 1.-Clonación del proyecto
+En el cmd nos ubicamos en la carpeta en la cual vamos a clonar el repositorio.
+Una vez ubicado en la carpeta, se procede con la clonacion del presente repositorio mediante el siguiente comando.
+```sh
+git clone {repository URL}
+```
+##### 2.-Ejecución del xampp
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Una vez instalado y configurado xampp, se procede con su ejecucion del mismo y abrimos el phpmyadmin, el cual nos ayuda con la gestion de base de datos.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Creamos una base de datos, para mayor facilidad se debe implmeentar con el nombre del proyecto que vayamos a ejecutar.
+##### 3.-Creación del archivo ".env"
+Cuando se clona el proyecto, viene consigo un archivos ".env-Example", el mismo se debe duplicar y cambiar por ".env", esto se hace para poder implementar las credenciales de los diferentes servicios que se requieres.
+##### 4.-Configuracion de base de datos.
+En el archivo ".env" se configura con las credenciales de la base de datos previamente creada.
+```
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=laravel_project
+DB_USERNAME=root
+DB_PASSWORD=secret
+```
+##### 4.-Comandos de instalación de dependencias.
 
-## Laravel Sponsors
+Con el siguiente comando instalamos las dependencias que se encuentran en el "composer.json".
+```
+composer install
+```
+Como siguiente, se instala las dependencias que se encuentra en el "package.json" con el siguiente comando .
+```
+npm install
+```
+Generamos una llave, la cual nos permite el enlace con la base de datos
+```
+php artisan key:generate
+```
+Se procede a realizar la migración con el siguiente comando.
+```
+php artisan migrate 
+```
+Finalizado la ejecución de los comandos, se procede a crear un enlace simbólico del storage el cual nos permite almacenar documentos o imágenes que son necesarios para el proyecto.
+```
+php artisan storage:link
+```
+##### 5.-Servicios utilizados.
+Previo a la ejecución del proyecto se necesitan obtener las credenciales de los servicios utilizados.
+###### Mailtrap
+Para el servio de mails, se utiliza [Mailtrap](https://mailtrap.io/) el cual premite el testear envios de email para la recuperacion de contraseñas.
+###### Pusher
+Para el chat en vivo, se utiliza [Pusher](https://pusher.com/) el cual no otorga un servio en la nube en tiempo real, para el envio de notificacion y mensajes.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+En la vista "chat.vue" y la vista "login.vue" en la sección  de funciones, cambiar las credenciales por las cual otorga pusher estas son credenciales apartes las cuales permite el enlace al canal apenas se inicia una conversacion o se ingresa al sistema.
 
-### Premium Partners
+## 6.-Ejecución del proyecto.
+Antes de ejecutar el servidor de laravel, se debe compilar todos los archivos ".vue" con el siguiente comando.
+```
+npm run dev
+```
+Si se realiza cambios en los archivos ".vue" se debe ejecutar de nuevo el comando anterior o ejecutar el siguiente comando que esta constantemente compilando al guardar las modificaciones 
+```
+npm run watch
+```
+Para la ejecucion del servicio, se debe ejecutar el sigueinte comando
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```
+php artisan serve
+```
+## Errores comunes
+##### Envio de mail.
+Revisar los puertos en el cual se ejecuta el envio de mails, puede cambiar el puerto 2525 que se encuentra predeterminado por el puerto 587.
+##### Chat en vivo.
 
-## Contributing
+Revisar el Javascript de las vista de chat de ser el caso o del "APPlayaout" de los cuales se necesita establecer el canal para el envio de mensajes.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+**Free Software, Hell Yeah!**

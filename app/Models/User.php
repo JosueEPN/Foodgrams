@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+
 
 class User extends Authenticatable
 {
@@ -17,26 +19,24 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
+   
     protected $fillable = [
         'name',
+        'nick_name',
         'email',
         'password',
+        'web_site',
+        'presentation',
+        'status',
+        
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
+  
     protected $hidden = [
-        'password',
         'remember_token',
+        'password',
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
@@ -58,4 +58,36 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get all of the post for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+
+    public function post()
+    {
+        return $this->hasMany(Posts::class);
+    }
+
+    public function followers()
+    {
+        return $this->hasMany(Followers::class);
+    }
+
+    public function receivesBroadcastNotificationsOn(){
+        return 'App.Models.User.'.$this->id;
+    }
+
+    public static function getUserSearch($nick_name){
+
+        $querry = (new static)
+        ->where('nick_name' ,'like' ,'%'.$nick_name."%")
+        ->get();
+      
+        return $querry;
+        
+    }
+
+    
 }

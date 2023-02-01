@@ -1,31 +1,76 @@
-<script setup>
-import { ref } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
-import { Head, Link } from '@inertiajs/inertia-vue3';
-import JetApplicationMark from '@/Jetstream/ApplicationMark.vue';
-import JetBanner from '@/Jetstream/Banner.vue';
-import JetDropdown from '@/Jetstream/Dropdown.vue';
-import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
-import JetNavLink from '@/Jetstream/NavLink.vue';
-import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
+<script>
+    
+    import { Inertia } from '@inertiajs/inertia';
+    import { Link } from '@inertiajs/inertia-vue3';
+    import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+    import JetBanner from '@/Jetstream/Banner.vue';
+    import JetDropdown from '@/Jetstream/Dropdown.vue';
+    import Dropdown from '@/Components/Dropdown.vue';
+    import Notifications from '@/Components/Notifications.vue';
+    import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
+    import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
 
-defineProps({
-    title: String,
-});
 
-const showingNavigationDropdown = ref(false);
+    export default {
+        components: {
+    JetBanner,
+    JetDropdown,
+    JetDropdownLink,
+    JetResponsiveNavLink,
+    AuthenticationCardLogo,
+    Dropdown,
+    Link,
+    Inertia,
+    Dropdown,
+    Notifications,
+},
 
-const switchToTeam = (team) => {
-    Inertia.put(route('current-team.update'), {
-        team_id: team.id,
-    }, {
-        preserveState: false,
-    });
-};
+        data() {
+            return {
+                showingNavigationDropdown: false,
+                users:[],
+                search:'',
+                userexists: true
+            }
+        },
+        props:{
+            title: String,
+        },
 
-const logout = () => {
-    Inertia.post(route('logout'));
-};
+        methods: {
+            switchToTeam(team) {
+                this.$inertia.put(route('current-team.update'), {
+                    'team_id': team.id
+                }, {
+                    preserveState: false
+                })
+            },
+            RedirectSearch(search){
+
+                Inertia.get(route('search.index'), {search:search});
+            },
+
+            logout() {
+                
+                axios.post('/offline/'+this.$page.props.user.id,{})
+                axios.post('/logout')
+                    .then(response => {
+                        window.location = '/login'
+                    })
+
+            }, listen(){
+                window.Echo.join('Foodgrams-channel')
+                .joining((user) => {
+                    if(user.status === 0){
+                        axios.post('/online/'+user.id,{})
+                    }
+                })
+            }
+        },
+        mounted() {
+            this.listen()
+        },
+    }
 </script>
 
 <template>
@@ -41,21 +86,51 @@ const logout = () => {
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
+                            <div class="shrink-0 flex items-center w-28">
                                 <Link :href="route('dashboard')">
-                                    <JetApplicationMark class="block h-9 w-auto" />
+                                     <AuthenticationCardLogo />
                                 </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <JetNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </JetNavLink>
                             </div>
                         </div>
 
+                        <div class="ml-3 relative">
+                                <Dropdown align="right" width="100" overflow="overflow-y-auto" maxheight="300">
+                                    <template #trigger>
+                                        <div class="pt-2 relative mx-auto text-gray-600">
+                                            <input v-model="search" @keyup.enter="RedirectSearch(search)" class="border-2 border-gray-300 bg-white w-100 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                                            type="search" placeholder="Busca tu receta o amigos">
+                                           <!-- Signo de busqueda -->
+                                           <span class="absolute right-0 top-0 mt-5 mr-4">
+                                                <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                                    viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
+                                                    width="512px" height="512px">
+                                                    <path
+                                                    d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </template>
+
+
+                                </Dropdown>
+                            </div>
+
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <!-- Chat -->
+                            <div class="ml-3">
+                                <Link :href="route('chats')">
+                                    <svg class="text-gray-700 w-7 h-7 cursor-pointer origin-center transform rotate-45" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </Link>
+                            </div>
+
+                            <!-- Notifications -->
+
+                            <notifications></notifications>
+
+
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <JetDropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -129,35 +204,28 @@ const logout = () => {
                             <div class="ml-3 relative">
                                 <JetDropdown align="right" width="48">
                                     <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
+                                        <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                                         </button>
-
-                                        <span v-else class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
-                                                {{ $page.props.user.name }}
-
-                                                <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </span>
                                     </template>
 
                                     <template #content>
                                         <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
-                                        </div>
+
+                                        <JetDropdownLink  :href="'/profile/'+$page.props.user.nick_name">
+                                            Perfil
+                                        </JetDropdownLink>                                        
 
                                         <JetDropdownLink :href="route('profile.show')">
-                                            Profile
+                                            Configuración
                                         </JetDropdownLink>
+                                        <div v-if="$page.props.user.permission.includes('admin.recetas.create')" >
+
+                                            <JetDropdownLink :href="route('index.user.admin')">
+                                                Admin
+                                            </JetDropdownLink>
+
+                                        </div>
 
                                         <JetDropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
                                             API Tokens
@@ -231,9 +299,21 @@ const logout = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <JetResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
-                                Profile
-                            </JetResponsiveNavLink>
+                            <JetDropdownLink  :href="'/profile/'+$page.props.user.nick_name" :active="route().current('profile')">
+                                Perfil
+                            </JetDropdownLink>                                        
+
+                            <JetDropdownLink :href="route('profile.show')" :active="route().current('profile.show')">
+                                Configuración
+                            </JetDropdownLink>
+
+                            <div v-if="$page.props.user.permission.includes('admin.recetas.create')" >
+
+                                <JetDropdownLink :href="route('index.user.admin')">
+                                    Admin
+                                </JetDropdownLink>
+
+                            </div>
 
                             <JetResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens
@@ -304,8 +384,17 @@ const logout = () => {
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="max-w-7x1 min-w-7x1 mx-auto py-14">
+                    <div class="flex justify-center">
+                     <slot></slot>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 </template>
+
+<script>
+
+
+</script>

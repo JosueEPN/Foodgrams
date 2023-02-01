@@ -1,40 +1,74 @@
-<script setup>
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetCheckbox from '@/Jetstream/Checkbox.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+<script>
+    import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+    import AuthenticationCard from '@/Components/AuthenticationCard'
+    import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo'
+    import JetButton from '@/Jetstream/Button'
+    import JetInput from '@/Jetstream/Input'
+    import JetCheckbox from '@/Jetstream/Checkbox'
+    import JetLabel from '@/Jetstream/Label'
+    import JetValidationErrors from '@/Jetstream/ValidationErrors'
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String,
-});
+    export default {
+        components: {
+            AuthenticationCard,
+            AuthenticationCardLogo,
+            JetButton,
+            JetInput,
+            JetCheckbox,
+            JetLabel,
+            JetValidationErrors,
+            Link,
+        },
 
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
+        props: {
+            canResetPassword: Boolean,
+            status: String
+        },
 
-const submit = () => {
-    form.transform(data => ({
-        ...data,
-        remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
-};
+        data() {
+            return {
+                form: this.$inertia.form({
+                    email: '',
+                    password: '',
+                    remember: false
+                })
+            }
+        },
+
+        methods: {
+            submit() {
+                this.form
+                    .transform(data => ({
+                        ... data,
+                        remember: this.form.remember ? 'on' : ''
+                    }))
+                    .post(this.route('login'), {
+                        onFinish: () => {
+                            this.form.reset('password')
+                        }
+                    })
+            },
+        },
+        mounted() {
+
+            var pusher = new Pusher('a1e93a0fc79646900b91', {
+            cluster: 'us2'
+            });
+
+            var channel = pusher.subscribe('Foodgrams-channel');
+         
+
+
+        },   
+    }
 </script>
 
 <template>
     <Head title="Log in" />
 
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <AuthenticationCardLogo />
         </template>
 
         <JetValidationErrors class="mb-4" />
@@ -77,13 +111,24 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
+                    ¿Olvidaste tu contraseña?
                 </Link>
 
                 <JetButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
+                    Iniciar sesión
                 </JetButton>
             </div>
         </form>
-    </JetAuthenticationCard>
+         <template #register>
+           <div>
+                <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg justify-items-center">
+                    <span class="mr-4">No tienes cuenta </span>
+                    <Link :href="route('register')"  class="underline text-sm text-gray-600 hover:text-gray-900">
+                            Registrate
+                    </Link>
+
+                </div>
+            </div>
+        </template>
+    </AuthenticationCard>
 </template>

@@ -16,8 +16,10 @@ const props = defineProps({
 
 const form = useForm({
     _method: 'PUT',
-    name: props.user.name,
+    nick_name: props.user.nick_name,
     email: props.user.email,
+    presentation: props.user.presentation,
+    web_site: props.user.web_site,
     photo: null,
 });
 
@@ -82,10 +84,6 @@ const clearPhotoFileInput = () => {
             Profile Information
         </template>
 
-        <template #description>
-            Update your account's profile information and email address.
-        </template>
-
         <template #form>
             <!-- Profile Photo -->
             <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
@@ -130,15 +128,15 @@ const clearPhotoFileInput = () => {
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="name" value="Name" />
+                <JetLabel for="Nick_name" value="nick_name" />
                 <JetInput
-                    id="name"
-                    v-model="form.name"
+                    id="nick_name"
+                    v-model="form.nick_name"
                     type="text"
                     class="mt-1 block w-full"
-                    autocomplete="name"
+                    autocomplete="nick_name"
                 />
-                <JetInputError :message="form.errors.name" class="mt-2" />
+                <JetInputError :message="form.errors.nick_name" class="mt-2" />
             </div>
 
             <!-- Email -->
@@ -171,6 +169,28 @@ const clearPhotoFileInput = () => {
                         A new verification link has been sent to your email address.
                     </div>
                 </div>
+            </div>
+            <!-- Web site -->
+            <div class="col-span-6 sm:col-span-4">
+                <JetLabel for="web_site" value="Web_site" />
+                <JetInput
+                    id="web_site"
+                    v-model="form.web_site"
+                    type="text"
+                    class="mt-1 block w-full"
+                />
+                <JetInputError :message="form.errors.web_site" class="mt-2" />
+            </div>
+             <!-- Presentation -->
+            <div class="col-span-6 sm:col-span-4">
+                <JetLabel for="presentation" value="Presentation" />
+                <JetInput
+                    id="presentation"
+                    v-model="form.presentation"
+                    type="text"
+                    class="mt-1 block w-full"
+                />
+                <JetInputError :message="form.errors.presentation" class="mt-2" />
             </div>
         </template>
 

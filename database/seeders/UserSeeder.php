@@ -20,11 +20,11 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Josue Singaña',
-            'email' => 'Josuesin01122015@gmail.com',
-            'nick_name' => 'Josin15',
+            'name' => 'Admin Foodgrams',
+            'email' => 'Admin.Foodgrams@outlook.com',
+            'nick_name' => 'SuperAdmin15',
             'email_verified_at' => now(),
-            'password' => bcrypt('secret'), // password
+            'password' => bcrypt('admin.15@2023'), // password
             'remember_token' => Str::random(30),
         ])->assignRole('Admin');
         

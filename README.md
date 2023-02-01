@@ -68,7 +68,7 @@ Para el servio de mails, se utiliza [Mailtrap](https://mailtrap.io/) el cual pre
 ###### Pusher
 Para el chat en vivo, se utiliza [Pusher](https://pusher.com/) el cual no otorga un servio en la nube en tiempo real, para el envio de notificacion y mensajes.
 
-En la vista "chat.vue" y la vista "login.vue" en la sección  de funciones, cambiar las credenciales por las cual otorga pusher estas son credenciales apartes las cuales permite el enlace al canal apenas se inicia una conversacion o se ingresa al sistema.
+En la vista ["chat.vue"](https://github.com/JosueEPN/Foodgrams/blob/main/resources/js/Pages/Auth/Login.vue) y la vista "login.vue" en la sección  de funciones, cambiar las credenciales por las cual otorga pusher estas son credenciales apartes las cuales permite el enlace al canal apenas se inicia una conversacion o se ingresa al sistema.
 
 ## 6.-Ejecución del proyecto.
 Antes de ejecutar el servidor de laravel, se debe compilar todos los archivos ".vue" con el siguiente comando.

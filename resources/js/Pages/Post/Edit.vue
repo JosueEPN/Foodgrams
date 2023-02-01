@@ -6,7 +6,7 @@
             </h2>
         </template>
                 <div class=" bg-white rounded-md px-6 py-10 w-full">
-                    {{ PostEdit }}
+                    
                     <h1 class="text-center text-2xl font-bold text-gray-500 mb-10">Edita</h1>
                     <form @submit.prevent="summit" enctype="multiform/form-data">
                         <div class="space-y-4 flex flex-row">
@@ -64,20 +64,23 @@
 
                         </div>
                         <div>
-                            <button type="submit"  class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600">Edita el Posts</button>
+                            <button type="submit"  class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600">Editar</button>
                             <button class="m-1 px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-indigo-600  "><Link :href="route('dashboard')"  >Cancelar</Link></button>
                         </div>
-                        
+
                         
                     </form>
                 </div>
 
 
-
+                <!--Modal-->
+                
 
 
     </AppLayout>
 </template>
+
+
 
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -86,6 +89,8 @@ import InputError from "@/Jetstream/InputError";
 import { defineProps } from 'vue';
 import { useForm,Link } from '@inertiajs/inertia-vue3';
 import route from '../../../../vendor/tightenco/ziggy/src/js';
+
+
 
 const props = defineProps({
         PostEdit:Object,
@@ -118,9 +123,7 @@ function filechange(e){
 function selectImage(){
             document.getElementById('image').click()
 }
-            
-
-
 
 
 </script>
+

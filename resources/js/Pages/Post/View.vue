@@ -61,10 +61,9 @@ export default {
 <template>
     <AppLayout >
 
-       
-       
-    
         <div class=" grip grid-cols-3 ">
+
+            <button class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]"> <Link :href="'/dashboard'"> Regresar </Link> </button>
             
             <div class="col-span-2 bg-white overflow-hidden shadow-none max-h-full m-2 p-2">
                 <div class="grid grid-cols-3 min-w-full ">
@@ -85,12 +84,21 @@ export default {
                                 <span class="block ml-2 text-xs text-gray-600">Hace {{ getDifferenceTime(post.created_at) }}</span>
                             </Link>
 
-                            <div v-if="$page.props.user.permission.includes('admin.recetas.create') || $page.props.user.id == post.user_id" >        
+                            <div v-if="$page.props.user.permission.includes('admin.recetas.create') && $page.props.user.id !==post.user.id" >        
                             
-                                <button> <Link :href="'/post/'+post.id+'/'+post.user_id+'/edit'"> Editar </Link> </button>
-                                <button > <Link :href="'/post/'+post.id+'/'+post.user_id+'/delete'" > Eliminar </Link></button>
+                                <Link :href="'/Admin/post/'+post.id+'/'+post.user_id+'/edit'"> <button class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]">  Editar  </button> </Link>
+                                <Link :href="'/Admin/post/'+post.id+'/'+post.user_id+'/delete'" > <button  class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]" >  Eliminar </button> </Link>
                 
                             </div>
+
+                            <div v-if="$page.props.user.id === post.user_id " >        
+                            
+                                <Link :href="'/post/'+post.id+'/'+post.user_id+'/edit'"> <button class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]">  Editar  </button> </Link>
+                                <Link :href="'/post/'+post.id+'/'+post.user_id+'/delete'" > <button  class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]" >  Eliminar </button></Link>
+                
+                            </div>
+
+                            
 
 
                           
@@ -139,7 +147,7 @@ export default {
                 <div class=" col-span-1">
                     <div class="scroll " ref="scrollComments">
                             
-                        <comments v-if="post.comments.length > 0" v-for="(comment,index) in post.comments" :key="index" :comment="comment.comment" :nickName="comment.user.nick_name" :urlImage="comment.user.profile_photo_url" :create="comment.created_at"></comments>
+                        <comments v-if="post.comments.length > 0" v-for="(comment,index) in post.comments" :key="index" :id="comment.id" :comment="comment.comment" :nickName="comment.user.nick_name" :urlImage="comment.user.profile_photo_url" :create="comment.created_at" :post_user_id="post.user.id" :user_id="comment.user_id" ></comments>
                         <div v-else class="w-100 text-grey-500">No hay comentarios</div>
                     </div>
                     <div class="flex flex-col items-start">

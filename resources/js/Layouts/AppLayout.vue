@@ -51,6 +51,7 @@
             },
 
             logout() {
+                
                 axios.post('/offline/'+this.$page.props.user.id,{})
                 axios.post('/logout')
                     .then(response => {
@@ -98,7 +99,7 @@
                                         <div class="pt-2 relative mx-auto text-gray-600">
                                             <input v-model="search" @keyup.enter="RedirectSearch(search)" class="border-2 border-gray-300 bg-white w-100 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                                             type="search" placeholder="Busca tu receta o amigos">
-                                           <!-- Signo de -->
+                                           <!-- Signo de busqueda -->
                                            <span class="absolute right-0 top-0 mt-5 mr-4">
                                                 <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
                                                     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
@@ -218,6 +219,13 @@
                                         <JetDropdownLink :href="route('profile.show')">
                                             Configuración
                                         </JetDropdownLink>
+                                        <div v-if="$page.props.user.permission.includes('admin.recetas.create')" >
+
+                                            <JetDropdownLink :href="route('index.user.admin')">
+                                                Admin
+                                            </JetDropdownLink>
+
+                                        </div>
 
                                         <JetDropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
                                             API Tokens
@@ -298,6 +306,14 @@
                             <JetDropdownLink :href="route('profile.show')" :active="route().current('profile.show')">
                                 Configuración
                             </JetDropdownLink>
+
+                            <div v-if="$page.props.user.permission.includes('admin.recetas.create')" >
+
+                                <JetDropdownLink :href="route('index.user.admin')">
+                                    Admin
+                                </JetDropdownLink>
+
+                            </div>
 
                             <JetResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens

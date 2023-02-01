@@ -10,7 +10,7 @@
     
     <div class="w-full flex justify-between p-3">
       <div class="flex">
-        <Link  :href="'/profile/'+$page.props.user.nick_name">
+        <Link  :href="'/profile/'+post.user.nick_name">
           <div class="rounded-full h-8 w-8 bg-gray-500 flex items-center justify-center overflow-hidden"> 
             <img  :src="post.user.profile_photo_url"
                       :alt="post.user.name" class="h-8 w-8 rounded-full object-cover"/>
@@ -23,7 +23,7 @@
         </Link>    
       </div>
       <div >
-          <div class="group inline-block" v-if="$page.props.user.permission.includes('admin.recetas.edit') || post.user_id == $page.props.user.id">
+          <div class="group inline-block" v-if="post.user_id === $page.props.user.id">
           <button>          
             <span>
               <svg
@@ -42,14 +42,37 @@
             class="bg-white border rounded-sm transform scale-0 group-hover:scale-100 absolute 
           transition duration-150 ease-in-out origin-top min-w-32" 
           >     
-          <div v-if="$page.props.user.permission.includes('admin.recetas.create') || $page.props.user.id == post.user_id" >
-
-          </div>        
+           
               <li class="rounded-sm px-3 py-1 hover:bg-gray-100" > <Link :href="'/post/'+post.id+'/'+post.user_id+'/edit'"> Editar </Link></li>
               <li class="rounded-sm px-3 py-1 hover:bg-gray-100"> <Link :href="'/post/'+post.id+'/'+post.user_id+'/delete'" > Eliminar </Link></li>
             
           </ul>
-        </div>          
+          </div> 
+          <div class="group inline-block" v-if="$page.props.user.permission.includes('admin.recetas.create') && $page.props.user.id !==post.user_id">
+          <button>          
+            <span>
+              <svg
+                class="fill-current h-4 w-4 transform group-hover:-rotate-180
+                transition duration-150 ease-in-out"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                />
+              </svg>
+            </span>
+          </button>
+          <ul
+            class="bg-white border rounded-sm transform scale-0 group-hover:scale-100 absolute 
+          transition duration-150 ease-in-out origin-top min-w-32" 
+          >     
+           
+              <li class="rounded-sm px-3 py-1 hover:bg-gray-100" > <Link :href="'/Admin/post/'+post.id+'/'+post.user_id+'/edit'"> Editar </Link></li>
+              <li class="rounded-sm px-3 py-1 hover:bg-gray-100"> <Link :href="'/Admin/post/'+post.id+'/'+post.user_id+'/delete'" > Eliminar </Link></li>
+            
+          </ul>
+          </div>         
         </div>
       
     </div>
@@ -92,6 +115,7 @@
       </div>
     </div>
   </div>
+  <!--Modal-->
 </template>
 
 <script>

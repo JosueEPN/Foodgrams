@@ -10,6 +10,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\OfflineController;
 use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\AdminController;
 
 use Inertia\Inertia;
 
@@ -36,8 +37,28 @@ Route::middleware([
     
     Route::get('/dashboard', [PostController::class,'index'])->name('dashboard');
     Route::get('/dashboard/search', [SearchUserController::class, 'index'])->name('search.index');
+    Route::get('/back',[PostController::class,'BackView'])->name('back');
+
+    
+    //Admin
+
+    Route::middleware(['role:Admin'])->group(function () {
+
+        Route::get('/Admin/user', [AdminController::class,'indexUser'])->name('index.user.admin');
+        Route::get('/Admin/post', [AdminController::class,'indexPost'])->name('index.post.admin');
+        Route::get('/admin/{user}/edit',[AdminController::class,'edit'])->name('edit.admin');
+        Route::post('/Admin/update',[AdminController::class,'update'])->name('update.admin');
+        Route::delete('/admin/{user}/deletePhoto',[AdminController::class,'destroyPhoto'])->name('delete.photo.admin');
+        Route::get('/admin/{user}/delete',[AdminController::class,'delete'])->name('delete.user.admin');
+        Route::get('/Admin/post/{post}/{user}/edit', [AdminController::class, 'show'])->name('show.post.admin');
+        Route::get('/Admin/post/{post}/{user}/delete', [AdminController::class, 'destroy'])->name('delete.post.admin');
+        Route::get('/Admin/user/create', [AdminController::class,'create'])->name('create.user.admin');
+        Route::post('/Admin/user/register',[AdminController::class,'register'])->name('user.register.admin');
+        
+    });
+   
+
     //Post
-    Route::get('/post-show', [PostController::class, 'show'])->name('post.show');
     Route::get('/post-create', [PostController::class, 'create'])->name('post.index');
     Route::post('/post-store', [PostController::class, 'store'])->name('post.store');
     Route::get('/post/{post}/{user}/edit', [PostController::class, 'show'])->name('post.show');
@@ -50,9 +71,11 @@ Route::middleware([
     //comentarios
 
     Route::post('/comment/{post}/{user}', [CommentsController::class, 'store'])->name('comment.store');
+    Route::get('/comment/{comment}/{id}/delete', [CommentsController::class, 'destroy'])->name('comment.destroy');
+    
 
     //Profile
-    Route::get('/profile/{nick_name}', [ProfileController::class,'index'])->name('profile');
+    Route::get('/profile/{id}', [ProfileController::class,'index'])->name('profile');
 
     //Chats
     Route::get('/chats', [ChatController::class,'index'])->name('chats');

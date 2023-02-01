@@ -31,4 +31,15 @@ class Followers extends Model
             'follower_id' => auth()->user()->id
         ]);
     }
+
+    public static function getFollow($user_id){
+        $querry = (new static)
+        ->where('user_id' ,'=' ,$user_id)
+        ->orWhere('follower_id','=',$user_id)
+        ->get();
+      
+
+        return $querry;
+        
+    }
 }

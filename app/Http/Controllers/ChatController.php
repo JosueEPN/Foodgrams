@@ -107,4 +107,21 @@ class ChatController extends Controller
         ]);
     }
 
+    //Chat controller api
+
+
+    public function chatAll()
+    {
+        $chats = Chats::all();
+        return $chats;
+    }
+
+    public function checkChatApi($id){
+        return $this->chat->with([
+            'usersent',
+            'userrecive',
+            'messages'
+        ])->where('id',$id)
+        ->first();
+    }
 }

@@ -113,7 +113,6 @@ class Posts extends Model
         ])
         ->where('id' , '=' ,$id)
         ->get();
-      
 
         return $querry;
     }

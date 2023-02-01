@@ -9,7 +9,7 @@
                         <div class="flex items-center">
                             <h2 class="block leading-relaxed font-light text-gray-700 text-3xl">{{ userProfile.nick_name }}</h2>
                             <Link v-if="userProfile.id !== $page.props.user.id" :href="'/direct-message/'+userProfile.id" class="cursor-pointer h-7 px-3 ml-3 outline-none border-transparent text-center rounded border bg-blue-500 hover:bg-blue-600 text-white bg-transparent font-semibold">Enviar mensaje</Link>
-                            <Link v-if="userProfile.id === $page.props.user.id || $page.props.user.permission.includes('admin.recetas.create')" href="/user/profile" class="cursor-pointer h-7 px-3 ml-3 focus:outline-none hover:border-transparent text-center rounded border border-gray-400 hover:bg-blue-500 hover:text-white bg-transparent text-gray-500 font-semibold">Editar perfil</Link>
+                            <Link v-if="userProfile.id === $page.props.user.id"  href="/user/profile" class="cursor-pointer h-7 px-3 ml-3 focus:outline-none hover:border-transparent text-center rounded border border-gray-400 hover:bg-blue-500 hover:text-white bg-transparent text-gray-500 font-semibold">Editar perfil</Link>
                             
                             <div v-else>
                                 <button v-if="!existsState" @click="follow" class="flex items-center ml-3 border border-blue-600 hover:bg-blue-600 hover:text-white rounded outline-none focus:outline-none bg-transparent text-blue-600 text-sm py-1 px-2">
@@ -25,6 +25,7 @@
                                     </svg>
                                 </button>
                             </div>
+                            <Link v-if="$page.props.user.permission.includes('admin.recetas.create') && userProfile.id !== $page.props.user.id " :href="'/admin/'+userProfile.id+'/edit'" class="cursor-pointer h-7 px-3 ml-3 focus:outline-none hover:border-transparent text-center rounded border border-gray-400 hover:bg-blue-500 hover:text-white bg-transparent text-gray-500 font-semibold">Editar perfil</Link>
                         </div>
                         <ul class="flex justify-content-around items-center">
                             <li>
@@ -39,8 +40,8 @@
                         </ul>
                         <br>
                         <div class="">
-                            <h1 class="text-base font-bold font-light">{{ userProfile.nick_name }}</h1>
-                            <h3 class="text-sm font-light">{{ userProfile.name }}</h3>
+                            
+                            <h1>Presentación</h1>
                             <span class="text-base">{{ userProfile.presentation }}</span>
                             <a class="block text-base text-blue-500 mt-2" target="_blank" :href="userProfile.web_site">{{ userProfile.web_site }}</a>
                         </div>

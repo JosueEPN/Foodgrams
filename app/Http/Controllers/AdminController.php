@@ -86,7 +86,7 @@ class AdminController extends Controller
         {
             $editUser->assignRole($request->role);
         }
-        return to_route('index.user.admin');
+        return to_route('index.user.admin')->with(['msg'=>'Se actualizao el usuarios']);
         
     }
 
@@ -193,7 +193,7 @@ class AdminController extends Controller
             $url = str_replace('storage', 'public', "post");
             Storage::delete( $url,$post->image_path);
             $post->delete(); 
-            return redirect() -> route('index.post.admin');  
+            return redirect() -> route('index.post.admin')->with(['msg'=>'Se borro el post']);  
     }
 
     public function create()

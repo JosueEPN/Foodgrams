@@ -8,6 +8,7 @@
 
             <h1 class="text-xl decoration-solid p-1"> Usuarios </h1>
             <Link :href="route('create.user.admin')">  <button class="w-full mx-3 mb-5 text-center bg-[#01889d] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]"> Crear Nuevo Usuario  </button> </Link>
+            {{ $page.props.msg }}
             <div class="w-full">
                 <table class="table-auto" >
                      <thead>
@@ -33,7 +34,11 @@
                             </td>
                             <td class="border border-gray-400 px-5">
                                 <button class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]"> <a :href="'/admin/'+ u.id + '/edit'">Editar</a> </button>
-                                <button class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]"> <a :href="'/admin/'+ u.id + '/delete'">Eliminar</a>  </button>
+                                
+                                    <button  class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]" @click="DeleteUser(u.nick_name,u.id)">
+                                        Eliminar
+                                    </button>
+                               
                             </td>
                              
                         </tr>
@@ -41,7 +46,7 @@
                                 
                 </table>
 
-                       
+                
             </div>
         </div>                        
          
@@ -51,21 +56,35 @@
 <script>
     import AppLayout from '@/Layouts/AppLayout';
     import { Link } from '@inertiajs/inertia-vue3';
+    import { Inertia } from "@inertiajs/inertia";
 
 
     export default {
         data(){
+            return {
+                isOpenAdmin: false,
+            }
            
         },
         props:{
             users: Array,
+            msg: String,
         },
         components: {
             AppLayout,
-            Link
+            Link,
+            Inertia
            
         },
-        methods: {}
+        methods: {
+            DeleteUser(nick_name,user_id)
+            {
+                var resultado = window.confirm('Seguro de Eliminar al usuario "' + nick_name + '"?');
+                if (resultado === true) {
+                    Inertia.get("/admin/" + user_id + "/delete");
+                }
+            }
+        }
             
     }
 </script>

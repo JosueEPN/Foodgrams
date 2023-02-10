@@ -31,14 +31,23 @@
                           
                             <td class="border border-gray-400 px-5">
                                 <a :href="'/Admin/post/'+post.id+'/'+post.user_id+'/edit'"><button  class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]" > Editar  </button> </a>
-                                <a :href="'/Admin/post/'+post.id+'/'+post.user_id+'/delete'"><button  class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]" > Eliminar </button> </a>
+                                
+                                    <button  class="w-20 mx-3 mb-5 text-center bg-[#ff6060] rounded text-white py-2 outline-none focus:outline-none hover:bg-[#ff3232]" @click="DeletePost(post.title,post.id,post.user_id)" >
+                                        Eliminar
+                                    </button>
+                                
                             </td>
+                    
+
                              
                         </tr>
                     </tbody>
                                 
                 </table>
 
+                            
+
+                               
                        
             </div>
         </div>                        
@@ -53,17 +62,29 @@
 
     export default {
         data(){
-           
+            return {
+                isOpenAdmin: false,
+            }
         },
         props:{
             posts: Array,
+            msg:String,
         },
         components: {
             AppLayout,
             Link,
            
         },
-        methods: {}
+        methods: 
+        {
+            DeletePost(tittle,id,user_id)
+            {
+                var resultado = window.confirm('Seguro de Eliminar el post "' + tittle + '"?');
+                if (resultado === true) {
+                    Inertia.get('/Admin/post/'+id+'/'+user_id+'/delete');
+                }
+            }
+        }
             
     }
 </script>

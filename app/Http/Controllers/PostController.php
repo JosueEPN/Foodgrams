@@ -86,10 +86,10 @@ class PostController extends Controller
 
         }
         
-        return $post[0];
-        /*return Inertia::render('Post/View',[
+        
+        return Inertia::render('Post/View',[
             'post' => $post[0]
-        ]);*/
+        ]);
        
     }
 
@@ -254,10 +254,12 @@ class PostController extends Controller
             return  with(['msg'=>'Se elimino el post']);  
     }
 
-    public function createApi()
+   
+    public function createApi(ImageRequest $request)
     {
-        return  with(['msg'=>'Se Ingreso a la vista']);
+        Posts::createPost($request);
+        return with(['msg'=>'Nuevo post creado']);
     }
-    
+
     
 }

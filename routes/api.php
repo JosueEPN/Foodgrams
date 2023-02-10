@@ -42,7 +42,7 @@ Route::post('/post-store', [PostController::class, 'store']);
     Route::post('/Admin/update',[AdminController::class,'updateUserApi']);
     Route::delete('/admin/{user}/delete',[AdminController::class,'deleteUserApi']);
     Route::get('/Admin/post/{post}/{user}/edit', [AdminController::class, 'showPostApi']);
-    Route::get('/Admin/post/{post}/{user}/delete', [AdminController::class, 'destroyPostApi']);
+    Route::delete('/Admin/post/{post}/{user}/delete', [AdminController::class, 'destroyPostApi']);
     Route::post('/Admin/user/register',[AdminController::class,'registerApi']);
     Route::post('/Admin/post/update',[PostController::class,'updatePostApi']);
 
@@ -62,3 +62,4 @@ Route::post('/user/register',[ProfileController::class,'registerApi']);
 Route::get('/post/{post}/{user}/edit', [PostController::class, 'showPostApi']);
 Route::get('/post/{post}/{user}/delete', [PostController::class, 'destroyPostApi']);
 Route::post('/post/update', [PostController::class, 'updatePostApi']);
+Route::post('/post-create', [PostController::class, 'createApi']);

@@ -76,6 +76,10 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'init_connection' => 'SET NAMES utf8',
+            'options' => [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ],
         ],
 
         'sqlsrv' => [

@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Admin Foodgrams',
-            'email' => 'Admin.Foodgrams@outlook.com',
+            'email' => 'supera15proyect@gmail.com',
             'nick_name' => 'SuperAdmin15',
             'email_verified_at' => now(),
             'password' => bcrypt('admin.15@2023'), // password
